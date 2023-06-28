@@ -1,6 +1,7 @@
 import icons from '../image/icons.svg'
 console.log(icons)
-function controller() {
+
+const recipeContainer = document.querySelector('.recipe')
 
     //render spinner load
     const renderSpinner = function (pareneElement) {
@@ -11,18 +12,18 @@ function controller() {
             </svg>
           </div>
         `
+        //insertAdjacentHTML: chèn node vào vị trí xác định
         recipeContainer.insertAdjacentHTML('afterbegin', markup)
     }
-
-    const recipeContainer = document.querySelector('.recipe')
-
-    var fetchApi = 'https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bc886'
-    
-    //1. loading recipes
-    renderSpinner(recipeContainer)
+       
     // dùng .then .catch
     const showRecipes = () => {
-        console.log('test')
+        const id = window.location.hash.slice(1);
+        console.log(id)
+        if(!id) return;
+        renderSpinner(recipeContainer)
+        var fetchApi = `https://forkify-api.herokuapp.com/api/v2/recipes/${id}`
+        
         fetch(fetchApi) 
             .then ((response) => {
                 if(!response.ok) {
@@ -31,6 +32,7 @@ function controller() {
                 return response.json()
             })
             .then ((data) => {
+                // use destructuring to recipe objects
                 let {recipe} = data.data
                 recipe = {
                     id: recipe.id,
@@ -42,10 +44,8 @@ function controller() {
                     cookingTime: recipe.cooking_time,
                     ingredients: recipe.ingredients,
                 }
-                console.log(recipe)
 
-                // rending recipes
-
+    // rending recipes
         const markup = `
         <figure class="recipe__fig">
             <img src="${recipe.image}" alt="Tomato" class="recipe__img" />
@@ -138,7 +138,10 @@ function controller() {
             })
             .catch((err) => console.log(`Could not get recipes: ${err}`))
     }
-    showRecipes()
+
+    // dùng hashchange để lắng nghe sự thay đổi khi #url thay đổi
+    // dùng load để lắng nghe sự thay đổi khi load lại trang
+    ['hashchange', 'load'].forEach(e=> window.addEventListener(e, showRecipes))
 
         // dùng async wait
         // async function fetchRecipes ()  {
@@ -157,7 +160,4 @@ function controller() {
         // const promise = fetchRecipes()
         // promise.then((data) => console.log(data))
         
-     };
 
-
-     controller()
