@@ -4,6 +4,8 @@ import icons from '../../image/icons.svg'
 class RecipeView {
     #parentElement = document.querySelector('.recipe') 
     #data;
+    #errorMessage = 'We could not find that recipe. Please try another one!'
+    #message = 'Start by searching for a recipe or an ingredient. Have fun!'
 
     render(data) {
       console.log('this:::',this)
@@ -115,7 +117,7 @@ class RecipeView {
     }
 
     //render spinner load
-    renderSpinner = function () {
+    renderSpinner() {
         const markup = `
         <div class="spinner">
             <svg>
@@ -124,8 +126,42 @@ class RecipeView {
           </div>
         `
         //insertAdjacentHTML: chèn node vào vị trí xác định
-        this.#parentElement.innerHTML = ''
+        this.#clear()
         this.#parentElement.insertAdjacentHTML('afterbegin', markup)
+    }
+
+    renderError(message = this.#errorMessage) {
+      const markup = `
+      <div class="error">
+        <div>
+          <svg>
+            <use href="${icons}#icon-alert-triangle"></use>
+          </svg>
+        </div>
+        <p>${message}</p>
+      </div>
+      `
+      this.#clear()
+      this.#parentElement.insertAdjacentHTML('afterbegin', markup)
+    }
+
+    renderMesssage(message = this.#message) {
+      const markup = `
+      <div class="recipe">
+          <div class="message">
+            <div>
+              <svg>
+                <use href="${icons}#icon-smile"></use>
+              </svg>
+            </div>
+            <p>${message}</p>
+          </div>
+      `
+    }
+
+    addHandlerRender = (handler) => {
+      window.addEventListener('hashchange', handler)
+      window.addEventListener('load', handler)
     }
 }
 

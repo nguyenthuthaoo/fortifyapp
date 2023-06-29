@@ -22,7 +22,9 @@ export const loadRecipe = async function (id) {
       };
       console.log('data',state.recipe)
     } catch (error) {
+      // catch error rồi ném qua bên controler
         console.error(`${error} @@@@`);
+        throw error
     }
   
   }

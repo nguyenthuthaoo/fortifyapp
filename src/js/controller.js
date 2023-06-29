@@ -22,11 +22,20 @@ import { async } from 'regenerator-runtime';
 
         } catch (error) {
             console.error(`Could not get products: ${error}`);
+            // show error message
+            recipeView.renderError()
         }
        
     }
-    window.addEventListener('hashchange', controlRecipe)
-    window.addEventListener('load', controlRecipe)
+
+
+    const init = () => {
+        recipeView.addHandlerRender(controlRecipe)
+    }
+
+    init()
+    // window.addEventListener('hashchange', controlRecipe)
+    // window.addEventListener('load', controlRecipe)
     // dùng hashchange để lắng nghe sự thay đổi khi #url thay đổi
     // dùng load để lắng nghe sự thay đổi khi load lại trang
     // ['hashchange', 'load'].forEach(e=> window.addEventListener(e, controlRecipe))
