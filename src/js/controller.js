@@ -3,14 +3,6 @@ import recipeView from './view/recipeView.js'
 import 'core-js/stable'
 import 'regenerator-runtime/runtime'
 import { async } from 'regenerator-runtime';
-
-const timeout = function ($) {
-        return new Promise(function (_, reject) {
-            setTimeout(function () {
-                reject(new Error(`Request took too long ! timeout after ${$} seconds`))
-            }, $ + 1000)
-        })
-}
     
     //1. loading recipes   
     // dùng .then .catch
