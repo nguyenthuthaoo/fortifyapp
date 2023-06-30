@@ -1,14 +1,15 @@
 import * as model from './model.js'
 import recipeView from './view/recipeView.js'
 import searchView from './view/searchView.js'
+import panigationView from './view/panigationView.js'
 import 'core-js/stable'
 import 'regenerator-runtime/runtime'
 import { async } from 'regenerator-runtime';
 import resultsView from './view/resultsView.js'
     
-if(module.hot) {
-    module.hot.accept()
-}
+// if(module.hot) {
+//     module.hot.accept()
+// }
     //1. loading recipes   
     // dùng .then .catch
     const controlRecipe = async function () {
@@ -46,17 +47,30 @@ if(module.hot) {
             await model.loadSearchResults(query)
 
             // render results
-            resultsView.render(model.state.search.results)
+            // resultsView.render(model.state.search.results)
+            resultsView.render(model.getSearchResultsPage())
+            
+            // panigation view
+            panigationView.render(model.state.search)
 
         } catch (error) {
             console.log(error)
         }
     }
 
+    const controlPanigation = function (gotoPage) {
+        // render new results
+            resultsView.render(model.getSearchResultsPage(gotoPage))
+            
+            // panigation new view page
+            panigationView.render(model.state.search)
+    }
+
 
     const init = () => {
         recipeView.addHandlerRender(controlRecipe)
         searchView.addHandlerSearch(controlSearchResults)
+        panigationView.addHandlerClick(controlPanigation)
     }
 
     init()

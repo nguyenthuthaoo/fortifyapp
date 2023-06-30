@@ -33,6 +33,7 @@ _generatedMarkupPreview (result) {
     </li>
     `
 }
+
 }
 
 export default new ResultsView()

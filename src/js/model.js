@@ -1,13 +1,15 @@
 import { async } from "regenerator-runtime";
-import { API_URL } from "./config";
+import { API_URL, RESULTS_PER_PAGE } from "./config";
 import { getJSON } from "./helper";
 console.log('api',API_URL)
 export const state = {
   recipe: {},
   search: {
     query: {},
-    results: []
-  }
+    results: [],
+    resultsPerPage: RESULTS_PER_PAGE,
+    page: 1
+  },
 };
 export const loadRecipe = async function (id) {
     try {
@@ -51,5 +53,13 @@ export const loadRecipe = async function (id) {
       console.error(`${error} @@@@`);
       throw error
     }
+  }
+
+  export const getSearchResultsPage = (page = state.search.page) => {
+    state.search.page = page
+    const start = (page -1) *state.search.resultsPerPage
+    const end = page *state.search.resultsPerPage
+    // slice: tách phần tử mảng vs vtri đầu cuối (0,10) sẽ cắt từ 0 - 9
+    return state.search.results.slice(start, end)
   }
 
