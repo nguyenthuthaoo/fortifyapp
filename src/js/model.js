@@ -2,6 +2,7 @@ import { async } from "regenerator-runtime";
 import { API_URL, RESULTS_PER_PAGE } from "./config";
 import { getJSON } from "./helper";
 console.log('api',API_URL)
+
 export const state = {
   recipe: {},
   search: {
@@ -10,7 +11,9 @@ export const state = {
     resultsPerPage: RESULTS_PER_PAGE,
     page: 1
   },
+  bookmarks: []
 };
+
 export const loadRecipe = async function (id) {
     try {
       const data = await getJSON(`${API_URL}/${id}`)
@@ -24,7 +27,12 @@ export const loadRecipe = async function (id) {
         servings: recipe.servings,
         cookingTime: recipe.cooking_time,
         ingredients: recipe.ingredients,
-      };
+      }
+
+      if(state.bookmarks.some(bookmark => bookmark.id === id))
+      state.recipe.bookmarked = true
+      else state.recipe.bookmarked = false
+
       console.log('data',state.recipe)
     } catch (error) {
       // catch error rồi ném qua bên controler
@@ -48,6 +56,8 @@ export const loadRecipe = async function (id) {
         image: recipe.image_url
         }
       })
+      // reset search results for page 1
+      state.search.page = 1
       
     } catch (error) {
       console.error(`${error} @@@@`);
@@ -69,4 +79,18 @@ export const updateServings = function(newServings) {
     // newQuantity = oldQuantity * newServing / oldServings 
   })
   state.recipe.servings = newServings
+}
+
+export const addBookmarks = function (recipe) {
+  //add bookmarks
+  state.bookmarks.push(recipe)
+
+  //mark current recipe as bookmark
+  if(state.recipe.id === recipe.id) state.recipe.bookmarked = true
+}
+
+export const deleteBookmarks = function(id) {
+  const index = state.bookmarks.findIndex(bookmark => bookmark.id === id)
+  state.bookmarks.splice(index, 1)
+  if(id === state.recipe.id) state.recipe.bookmarked = false
 }
