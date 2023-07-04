@@ -63,3 +63,10 @@ export const loadRecipe = async function (id) {
     return state.search.results.slice(start, end)
   }
 
+export const updateServings = function(newServings) {
+  state.recipe.ingredients.forEach(ingredient => {
+    ingredient.quantity = (ingredient.quantity * newServings) / state.recipe.servings
+    // newQuantity = oldQuantity * newServing / oldServings 
+  })
+  state.recipe.servings = newServings
+}

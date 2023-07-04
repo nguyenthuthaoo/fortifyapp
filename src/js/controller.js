@@ -20,6 +20,9 @@ import resultsView from './view/resultsView.js'
             if(!id) return;
             recipeView.renderSpinner()
     
+            // 0. UPDATE results view to mark selected search results
+            resultsView.update(model.getSearchResultsPage())
+
             // 1. load the recipe
             await model.loadRecipe(id)
     
@@ -66,9 +69,19 @@ import resultsView from './view/resultsView.js'
             panigationView.render(model.state.search)
     }
 
+    const controlServings = function (newServings) {
+        // update the recipe servings (in state)
+        model.updateServings(newServings)
+
+        // update the recipe view 
+        // recipeView.render(model.state.recipe)
+        recipeView.update(model.state.recipe)
+    }
+
 
     const init = () => {
         recipeView.addHandlerRender(controlRecipe)
+        recipeView.addHandlerUpdateServings(controlServings)
         searchView.addHandlerSearch(controlSearchResults)
         panigationView.addHandlerClick(controlPanigation)
     }
