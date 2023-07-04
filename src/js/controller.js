@@ -24,14 +24,16 @@ import { async } from 'regenerator-runtime';
     
             // 0. UPDATE results view to mark selected search results
             resultsView.update(model.getSearchResultsPage())
+            
+            // 3. update bookmark view
             bookmarksView.update(model.state.bookmarks)
 
             // 1. load the recipe
             await model.loadRecipe(id)
-    
+            
             // 2. rendering recipe
             recipeView.render(model.state.recipe)
-
+            
         } catch (error) {
             console.error(`Could not get products: ${error}`);
             // show error message
@@ -81,7 +83,7 @@ import { async } from 'regenerator-runtime';
         recipeView.update(model.state.recipe)
     }
 
-    const controlBookmarks = function() {
+    const controlAddBookmarks = function() {
         // add/delete bookmarks
         if(!model.state.recipe.bookmarked) {
             model.addBookmarks(model.state.recipe)
@@ -97,11 +99,15 @@ import { async } from 'regenerator-runtime';
         bookmarksView.render(model.state.bookmarks)
     }
 
+    const controlBookmarks = function() {
+        bookmarksView.render(model.state.bookmarks)
+    }
 
     const init = () => {
+        recipeView.addHandlerBookmarks(controlBookmarks)
         recipeView.addHandlerRender(controlRecipe)
         recipeView.addHandlerUpdateServings(controlServings)
-        recipeView.addHandlerAddBookmarks(controlBookmarks)
+        recipeView.addHandlerAddBookmarks(controlAddBookmarks)
         searchView.addHandlerSearch(controlSearchResults)
         panigationView.addHandlerClick(controlPanigation)
 
@@ -115,4 +121,8 @@ import { async } from 'regenerator-runtime';
     // ['hashchange', 'load'].forEach(e=> window.addEventListener(e, controlRecipe))
 
         
+const deleteBookmarks = function() {
+    localStorage.clear('bookmarks')
+}
 
+// deleteBookmarks()

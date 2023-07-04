@@ -81,16 +81,32 @@ export const updateServings = function(newServings) {
   state.recipe.servings = newServings
 }
 
+export const storageBookmarks = function() {
+  localStorage.setItem('bookmarks' ,JSON.stringify(state.bookmarks))
+}
+
 export const addBookmarks = function (recipe) {
   //add bookmarks
   state.bookmarks.push(recipe)
 
   //mark current recipe as bookmark
   if(state.recipe.id === recipe.id) state.recipe.bookmarked = true
+  
+  storageBookmarks()
 }
 
 export const deleteBookmarks = function(id) {
   const index = state.bookmarks.findIndex(bookmark => bookmark.id === id)
   state.bookmarks.splice(index, 1)
   if(id === state.recipe.id) state.recipe.bookmarked = false
+
+  storageBookmarks()
 }
+
+const init = function() {
+  const storage = localStorage.getItem('bookmarks')
+  if(storage) state.bookmarks = JSON.parse(storage)
+}
+
+init()
+console.log('Storage: ',state.bookmarks)

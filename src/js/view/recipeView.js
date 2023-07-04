@@ -122,6 +122,10 @@ class RecipeView extends View {
         handler()
       })
     }
+
+    addHandlerBookmarks = (handler) => {
+      window.addEventListener('load', handler)
+    }
 }
 
 export default new RecipeView()
